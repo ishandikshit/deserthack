@@ -8,6 +8,7 @@ http://amzn.to/1LGWsLG
 """
 
 from __future__ import print_function
+import scipy.integrate as integrate
 
 
 # --------------- Helpers that build all of the responses ----------------------
@@ -42,6 +43,17 @@ def build_response(session_attributes, speechlet_response):
 
 
 # --------------- Functions that control the skill's behavior ------------------
+
+def solveMath(intent):
+    session_attributes = {}
+    card_title = "Welcome"
+#    result = integrate.quad(lambda x: special.jv(2.5,x), 0, 4.5)
+    if intent[type]=="Integration":
+        result = integrate.quad(lambda x: x, 0, 2);
+        result - str(result)
+        speech_output = result
+    return build_response(session_attributes, build_speechlet_response(
+        card_title, speech_output, reprompt_text, should_end_session))
 
 def get_welcome_response():
     """ If we wanted to initialize the session to have some attributes we could
@@ -155,14 +167,8 @@ def on_intent(intent_request, session):
     intent_name = intent_request['intent']['name']
 
     # Dispatch to your skill's intent handlers
-    if intent_name == "MyColorIsIntent":
-        return set_color_in_session(intent, session)
-    elif intent_name == "WhatsMyColorIntent":
-        return get_color_from_session(intent, session)
-    elif intent_name == "AMAZON.HelpIntent":
-        return get_welcome_response()
-    elif intent_name == "AMAZON.CancelIntent" or intent_name == "AMAZON.StopIntent":
-        return handle_session_end_request()
+    if intent_name="Devils":
+        return solveMath(intent)
     else:
         raise ValueError("Invalid intent")
 
